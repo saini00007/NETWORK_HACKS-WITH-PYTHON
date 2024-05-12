@@ -1,0 +1,29 @@
+
+This script utilizes the scapy library to sniff and manipulate network packets. Here's a breakdown of its functionality:
+
+Import Statements:
+
+The script starts by importing necessary modules from scapy. sniff is used for packet sniffing, send for sending packets, and IP and TCP for creating
+ IP and TCP packets respectively.
+Default Configuration:
+
+It sets default values for the network interface (dev) and packet filter (filter). These can be adjusted as needed.
+handle_packet Function:
+
+This function is the callback used by sniff to handle each captured packet.
+It checks if the packet is a TCP packet using packet.haslayer(TCP).
+Then, it checks if the packet is not a SYN, RST, FIN, and is an ACK packet.
+If the conditions are met, it constructs a TCP RST packet with the appropriate fields (source and destination IP addresses, source and destination ports, 
+sequence number, and acknowledgment number) reversed.
+It sends the constructed RST packet using send.
+Finally, it prints information about the reset connection, including source and destination IP addresses and ports.
+Sniffing Packets:
+
+The sniff function is called with parameters specifying the interface to sniff on (iface=dev), the filter to apply (filter=filter), and the callback function 
+to handle each packet (prn=handle_packet).
+Note:
+
+The script concludes with a note advising that it should only be used for legitimate testing purposes, likely due to the potential impact of sending RST packets 
+on network connections.
+Overall, this script allows you to sniff TCP packets on a specified network interface, identify certain types of packets, and send RST packets to reset TCP 
+connections for those packets. It's important to use such scripts responsibly and ethically, as they can potentially disrupt network communications.

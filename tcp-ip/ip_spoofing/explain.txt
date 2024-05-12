@@ -1,0 +1,22 @@
+
+
+It imports necessary modules:
+
+sys for handling command-line arguments and exiting the script.
+send, IP, and ICMP from scapy.all module. These are used for sending packets and constructing IP and ICMP packets.
+The script checks if the number of command-line arguments is less than 3 (i.e., if source and destination IP addresses are provided). If not, it prints a usage message and exits with an error code.
+
+It constructs an ICMP packet with the specified source and destination IP addresses provided as command-line arguments. This is done using IP(src=source_ip, dst=destination_ip) / ICMP(). IP() creates an IP header, and ICMP() creates an ICMP echo request packet.
+
+The constructed packet is then sent using the send() function. The response (if any) is stored in the answer variable.
+
+If a response is received, it prints the details of the response packet using the show() method of the response packet.
+
+Overall, this script allows you to send an ICMP echo request packet from a specified source IP address to a destination IP address and displays the response, if any.
+
+To use this script, run it from the command line with the source and destination IP addresses as arguments:
+
+
+./script.py <source_ip> <destination_ip>
+
+Replace <source_ip> and <destination_ip> with the actual IP addresses you want to use.

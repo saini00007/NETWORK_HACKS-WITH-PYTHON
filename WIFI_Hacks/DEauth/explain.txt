@@ -1,0 +1,43 @@
+To use the provided Python script for sending deauthentication packets, follow these steps:
+
+1. **Prepare Your Environment**:
+   - Ensure you have Python 3 installed on your system.
+   - Install Scapy, a Python library used for crafting and sending packets. You can install it via pip:
+     ```
+     pip install scapy
+     ```
+
+2. **Understand the Script**:
+   - The script takes at least one argument: the BSSID (MAC address of the access point).
+   - Optionally, you can provide a second argument, which is the client's MAC address. If not provided, the broadcast address will be used as the destination.
+   - The script continuously sends deauthentication packets to the specified destination.
+
+3. **Run the Script**:
+   - Open a terminal or command prompt.
+   - Navigate to the directory containing the script.
+   - Run the script with appropriate arguments. For example:
+     ```
+     python script_name.py <bssid> [client]
+     ```
+     Replace `<bssid>` with the MAC address of the access point and `[client]` with the MAC address of the client (optional).
+   - Example usage:
+     ```
+     python script_name.py 00:11:22:33:44:55
+     ```
+     or
+     ```
+     python script_name.py 00:11:22:33:44:55 00:aa:bb:cc:dd:ee
+     ```
+
+4. **Observations**:
+   - As the script runs, it will continuously print messages indicating that it's sending deauthentication packets.
+   - You can observe the effect of these packets on the targeted devices (e.g., temporary disconnection from the network).
+
+5. **Stopping the Script**:
+   - To stop the script, press `Ctrl + C` in the terminal where the script is running. This will terminate the script execution.
+
+6. **Considerations**:
+   - Make sure to use this script responsibly and only on networks you are authorized to test or manage.
+   - Sending deauthentication packets can disrupt network connectivity for the targeted devices, so use it with caution.
+
+By following these steps, you should be able to use the provided Python script to send deauthentication packets to specific devices on a WiFi network.

@@ -1,0 +1,21 @@
+This is a Python script that scans for available WiFi networks using the `wifi` library and prints out information about each network, including its SSID, MAC address, channel, signal strength, and encryption type (if applicable).
+
+Let's break down the script:
+
+1. `#!/usr/bin/python3`: This line is called a shebang and is used to specify the path to the Python interpreter that will be used to execute the script.
+
+2. `from wifi import Cell`: This imports the `Cell` class from the `wifi` module. The `Cell` class represents a WiFi network cell.
+
+3. `iface = "wlp2s0"`: This variable holds the name of the network interface to be used for scanning WiFi networks. In this case, it's set to `"wlp2s0"`. You may need to change this depending on your system's network interface name.
+
+4. `for cell in Cell.all(iface):`: This loop iterates over all WiFi network cells detected by the specified network interface (`iface`).
+
+5. Inside the loop:
+   - `output = "%s\t(%s)\tchannel %d\tsignal %d\tmode %s" % (...)`: This line creates a string called `output` formatted with information about the current WiFi network cell. It includes the SSID (`cell.ssid`), MAC address (`cell.address`), channel (`cell.channel`), signal strength (`cell.signal`), and mode (`cell.mode`).
+   - `if cell.encrypted:`: This checks if the network is encrypted.
+     - If the network is encrypted, it appends the encryption type to the `output` string.
+     - If the network is not encrypted, it appends "(Open)" to the `output` string.
+
+6. `print(output)`: This line prints out the `output` string, which contains information about the current WiFi network cell.
+
+Overall, the script scans for available WiFi networks, gathers information about each network, and prints out the information in a formatted manner.

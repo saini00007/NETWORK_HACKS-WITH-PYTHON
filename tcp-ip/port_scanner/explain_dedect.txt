@@ -1,0 +1,67 @@
+This Python script is designed to detect port scans by monitoring incoming TCP packets using Scapy. Let's
+break down the functionality of the script:
+
+### 1. Importing Libraries:
+```python
+import sys
+from time import time
+from scapy.all import sniff
+```
+- `sys` is imported to access command-line arguments.
+- `time` function from the `time` module is used to get the current time in Unix format.
+- `sniff` function from Scapy is used to capture and process incoming packets.
+
+### 2. Global Variables:
+```python
+ip_to_ports = dict()
+nr_of_diff_ports = 10
+port_scan_timespan = 10
+```
+- `ip_to_ports`: A dictionary to store IP addresses and the ports they have scanned, along with the time of the scan.
+- `nr_of_diff_ports`: Maximum number of different ports scanned within a time span.
+- `port_scan_timespan`: Time span (in seconds) within which port scans are monitored.
+
+### 3. Function Definition:
+```python
+def detect_port_scan(packet):
+    ip = packet.getlayer("IP")
+    tcp = packet.getlayer("TCP")
+    # Records scanned port and time in Unix format
+    ip_to_ports.setdefault(ip.src, {})[str(tcp.dport)] = int(time())
+    # Checks if source IP has scanned too many different ports
+    if len(ip_to_ports[ip.src]) >= nr_of_diff_ports:
+        scanned_ports = ip_to_ports[ip.src].items()
+        # Checks recorded time of each scan
+        for (scanned_port, scan_time) in scanned_ports:
+            # Deletes scanned port if not in timeout span
+            if scan_time + port_scan_timespan < int(time()):
+                del ip_to_ports[ip.src][scanned_port]
+        # Deletes source IP if still too many scanned ports
+        if len(ip_to_ports[ip.src]) >= nr_of_diff_ports:
+            print("Port scan detected from " + ip.src)
+            print("Scanned ports: " + ", ".join(ip_to_ports[ip.src].keys()) + "\n")
+            del ip_to_ports[ip.src]
+```
+- `detect_port_scan`: This function is called for each captured packet by Scapy. It extracts the IP and 
+TCP layers from the packet.
+- It records the scanned port and its scan time in Unix format in the `ip_to_ports` dictionary.
+- If the source IP has scanned too many different ports, it checks the recorded time of each scan. If 
+any scanned port is not within the timeout span, it deletes it. If the source IP still has too many scanned 
+ports after this cleanup, it prints a detection message and removes the source IP from the dictionary.
+
+### 4. Main Sniffing:
+```python
+if len(sys.argv) < 2:
+    print(sys.argv[0] + " <iface>")
+    sys.exit(0)
+sniff(prn=detect_port_scan, filter="tcp", iface=sys.argv[1], store=0)
+```
+- The script checks if the required command-line argument (the network interface) is provided. If not, 
+it prints usage information and exits.
+- It starts sniffing packets on the specified network interface (`sys.argv[1]`) using the `sniff` function. 
+It calls the `detect_port_scan` function for each captured packet, filters only TCP packets, and disables 
+storing packets in memory (`store=0`).
+
+This script monitors incoming TCP packets and detects port scans based on the number of different ports scanned 
+by a source IP within a specified time span. If a source IP exceeds the defined threshold, it's considered a 
+port scan, and the script prints a detection message along with the scanned ports.

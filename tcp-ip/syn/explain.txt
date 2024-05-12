@@ -1,0 +1,39 @@
+Source Port Range:
+
+
+"source_ports = range(1024, 65536)"
+
+
+We define a range of source ports from 1024 to 65535. These are the ports from which the SYN packets will appear 
+to originate. Using a range allows us to send multiple SYN packets with different source ports, which helps in 
+evading detection and allows for more effective flooding.
+Sending SYN Packets:
+
+
+
+"for sport in source_ports:
+    packet = IP(src=spoofed_ip, dst=target_ip) / TCP(sport=sport, dport=80, flags="S")
+    send(packet, verbose=False)"
+
+We iterate over each source port in the source_ports range. For each port, we construct a TCP SYN packet with the
+spoofed source IP address (spoofed_ip), the target IP address (target_ip), and the current source port.
+The send() function from Scapy is used to send the constructed packet. Setting verbose=False suppresses the 
+output of each packet sent to avoid cluttering the terminal.
+Printing Sent Packets:
+
+
+"print(f"Sent SYN packet from {spoofed_ip}:{sport} to {target_ip}:80")'""''
+
+After sending each SYN packet, we print a message indicating the source IP address and port from which the packet was sent, as well as the target IP address and port.
+Completion Message:
+
+python
+Copy code
+"print("SYN flood complete.")"
+
+
+Finally, we print a message indicating the completion of the SYN flood once all SYN packets have been sent.
+Overall, the script now sends multiple SYN packets with different source ports to a specified target IP address,
+effectively flooding the target with connection requests and potentially causing denial-of-service (DoS) conditions 
+if the target is unable to handle the volume of incoming connections. It's essential to use such scripts responsibly 
+and only on networks for which you have authorization to perform testing.

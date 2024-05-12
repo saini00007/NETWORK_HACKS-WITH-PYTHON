@@ -1,0 +1,39 @@
+This Python script utilizes Scapy, a powerful packet manipulation tool, to monitor WiFi traffic on a specified network interface. Let's break down its functionality:
+
+1. **Importing Modules**:
+   - The script imports necessary modules:
+     - `time`: For time-related operations.
+     - `sys`: For accessing command-line arguments.
+     - `os`: For executing system commands.
+     - `scapy.all`: Importing all modules from Scapy for packet manipulation.
+
+2. **Setting Default Values**:
+   - The script initializes default values for the network interface (`iface`), the iwconfig command (`iwconfig_cmd`), maximum SSIDs per address (`max_ssids_per_addr`), maximum deauthentications per timespan (`nr_of_max_deauth`), and timespan for deauthentications (`deauth_timespan`).
+
+3. **Packet Handling Function** (`handle_packet`):
+   - This function is called for each packet sniffed by Scapy.
+   - It takes a packet (`pkt`) as input.
+   - If the packet is a deauthentication packet (`Dot11Deauth` layer):
+     - It records the occurrence of the deauthentication packet from the source address (`pkt.addr2`) along with the timestamp.
+     - If a certain number of deauthentication packets are detected within a specified timespan, it prints a message indicating a deauthentication flood from that source address.
+   - If the packet is a probe response packet (`Dot11ProbeResp` layer):
+     - It records the SSID and source address (`pkt.addr2`) combination.
+     - If a source address sends probe responses with too many different SSIDs, it prints a message indicating SSID spoofing from that source address.
+
+4. **Parsing Command-Line Arguments**:
+   - If command-line arguments are provided, the script updates the network interface (`iface`) with the provided value.
+
+5. **Setting the Device into Monitor Mode**:
+   - It executes a system command (`iwconfig_cmd`) to set the specified network interface into monitor mode.
+
+6. **Sniffing Packets**:
+   - It starts sniffing packets on the specified network interface using Scapy's `sniff` function.
+   - The `handle_packet` function is called for each sniffed packet.
+
+7. **Explanation**:
+   - The script monitors WiFi traffic, specifically looking for deauthentication packets and probe responses.
+   - It keeps track of the number of deauthentication packets and SSIDs received from each source address.
+   - If it detects a high number of deauthentication packets from a source address within a short timespan, it indicates a deauthentication flood.
+   - If it detects a source address sending probe responses with too many different SSIDs, it indicates SSID spoofing.
+
+In summary, this script serves as a tool for detecting potential attacks or anomalies on a WiFi network, such as deauthentication floods and SSID spoofing.

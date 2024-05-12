@@ -1,0 +1,21 @@
+This is a Python script that utilizes the `scapy` library for packet manipulation and sniffing. Here's a brief explanation of what the script does:
+
+1. **Shebang**: `#!/usr/bin/python3` is used to specify the interpreter to run the script, in this case, Python 3.
+
+2. **Importing Libraries**: 
+    - `from scapy.all import *`: Imports all symbols from the scapy library. Scapy is a powerful interactive packet manipulation program and library.
+    
+3. **Variables**:
+    - `iface = "wlp2s0"`: Specifies the interface (network adapter) to sniff on. 
+    - `iwconfig_cmd = "/usr/sbin/iwconfig"`: Stores the path to the `iwconfig` command-line utility, which is used to configure wireless network interfaces.
+
+4. **Function Definition**:
+    - `handle_packet(packet)`: This function takes a packet as input and is responsible for handling it. It checks if the packet is a probe request, probe response, or association request, and if so, it prints out the SSID (Service Set Identifier) of the wireless network.
+  
+5. **Setting Device into Monitor Mode**:
+    - `os.system(iwconfig_cmd + " " + iface + " mode monitor")`: Executes a system command to set the specified interface (`iface`) into monitor mode. Monitor mode is used for packet sniffing and allows capturing of all wireless traffic on the channel.
+
+6. **Sniffing Packets**:
+    - `sniff(iface=iface, prn=handle_packet)`: Initiates packet sniffing on the specified interface (`iface`). It calls the `handle_packet` function for each packet captured (`prn` parameter).
+
+Overall, this script sets up a packet sniffing environment on a specific wireless interface in monitor mode and prints out SSIDs of relevant wireless frames (probe requests, probe responses, and association requests) as they are captured.

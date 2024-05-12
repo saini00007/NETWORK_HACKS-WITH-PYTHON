@@ -1,0 +1,6 @@
+Explanation:
+
+This script utilizes Scapy library for packet manipulation and sniffing.
+It sets up a function handle_packet() to process incoming packets. Specifically, it checks if the packet is a Probe Response (a type of packet in Wi-Fi networks), and if so, it prints the current timestamp, the source MAC address of the device sending the probe response, and the SSID it's searching for.
+It then sets the specified network interface (iface) into monitor mode using the iwconfig command.
+Finally, it starts sniffing packets on the specified interface using Scapy's sniff() function, with the prn parameter set to call handle_packet() for each packet received.

@@ -1,0 +1,26 @@
+writer:---.
+
+We define a write_packet function that writes the captured packet to the pcap dump file.
+We set the network interface (dev) and the output pcap dump file (dump_file).
+We open a live capture using pcapy.open_live.
+We open a dump file using pcap.dump_open.
+We start a packet capture loop using pcap.loop, where each captured packet is passed to the write_packet function.
+Please adjust the dev and dump_file variables according to your requirements before running the code. Additionally, 
+ensure that you have the necessary permissions to capture network packets.
+
+
+reader:--
+ 
+
+ We define a read_packet function that prints the header and data of each packet.
+We set the input pcap dump file (input_file).
+We open the pcap dump file for reading using pcapy.open_offline.
+We start a packet capture loop using pcap.loop, where each packet read from the pcap dump file is passed to the read_packet function.
+Please replace the input_file variable with the path to your pcap dump file before running the code. This code will print out information 
+about each packet in the pcap dump file.
+
+
+
+
+
+

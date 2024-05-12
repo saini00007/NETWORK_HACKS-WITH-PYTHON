@@ -1,0 +1,33 @@
+
+1. **Import Statements**:
+    - The script begins by importing necessary modules: **sys**, **getopt**, and **pcapy**.
+    - Additionally, it imports the **ImpactDecoder** class from the **impacket** library.
+
+2. **Variable Initialization**:
+    - `dev`: The network interface device (e.g., "enp3s0f1") to capture packets from.
+    - `filter`: The packet filter (e.g., "arp") to apply during packet capture.
+    - `decoder`: An instance of the **EthDecoder** class for decoding packet data.
+
+3. **Packet Handling Function** (`handle_packet`):
+    - This function is called for each captured packet.
+    - It decodes the packet data using the `decoder` and prints the result.
+
+4. **Usage Function** (`usage`):
+    - Displays usage instructions for the script.
+
+5. **Parsing Command-Line Parameters**:
+    - The script parses command-line options using the **getopt** module.
+    - It accepts options `-i` (for specifying the network interface) and `-f` (for the packet filter).
+
+6. **Opening the Network Device in Promiscuous Mode**:
+    - The script opens the specified network device (`dev`) in promiscuous mode using **pcapy**.
+    - The parameters passed to `pcapy.open_live` include the device, maximum packet size (1500 bytes),
+     promiscuous mode (0), and timeout (100 milliseconds).
+
+7. **Setting the Packet Filter**:
+    - The script sets the packet filter to the specified value (`filter`) using `pcap.setfilter`.
+
+8. **Packet Capture Loop**:
+    - The script enters an infinite loop (`pcap.loop(0, handle_packet)`) to capture packets.
+    - For each packet, the `handle_packet` function is called to decode and print the packet data.
+

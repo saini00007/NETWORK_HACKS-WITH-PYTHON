@@ -1,0 +1,6 @@
+There are spaces in the shebang line (#!/ usr / bin / p y t h o n 3). It should be #!/usr/bin/python3.
+You imported Scapy using from scapy.all import *, but then you're referencing EAPOL and wrpcap without specifying the module. You should either use scapy.all.EAPOL and scapy.all.wrpcap or just import EAPOL and wrpcap directly.
+The indentation in the script is inconsistent, which might cause syntax errors.
+There is a typo in packet variable name. It's spelled differently in different places (packet vs p a c k e t).
+The os.system call might not work as expected. It's better to use the subprocess module for executing system commands.
+The loop sniff(iface=iface, prn=handle_packet) do samae seems incomplete and doesn't serve any purpose.

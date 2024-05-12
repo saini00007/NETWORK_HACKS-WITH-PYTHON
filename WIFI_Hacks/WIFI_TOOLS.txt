@@ -1,0 +1,47 @@
+
+Tools
+
+8.18.1 KRACK Attack
+
+KRACK attack consists of a bunch of vulnerabilities regarding the reinstallation of the key
+used to encrypt the traffic in WPA and WPA2. This can for example result in the installation
+of a key (GTK) that is all zero and therefore known thus an attacker can use it to decrypt the
+traffic without knowing the original key. It is done by replaying a manipulated packet (the
+third of the four-way-handshake). An updated client is not vulnerable to this attack. As for
+the other attacks the access points should also be updated if it supports Fast BSS Transition or
+client repeater functionality, which only enterprise routers should have enabled. Nevertheless
+it’s of course recommended to keep the router updated as well.
+More details of the attack can be found in the paper describing it https://papers.
+mathyvanhoef.com/ccs2017.pdf, Python code scripts to test if your client or AP is vul-
+nerable or to read how the attack is implemented using Scapy can be found on Github
+https://github.com/vanhoefm/krackattacks-scripts.
+
+8.18.2 KrØØk attack
+
+The KrØØk attack is based on a bug in Broadcom and Cypress Wifi chips, which allows to
+install a key that consists only of zeros.
+An example implementation can be found in the following Github repository https://
+github.com/akabe1/kr00ker.
+8.18.3 WiFuzz
+WiFuzz is a 802.11 protocol fuzzer. The tool uses Scapy and its fuzz() function to send
+manipulated packets to an access point. One can define which protocols (Probe-Request,
+Associaton, Authentication, etc.) should get fuzzed.
+The source code of the project can be found on the internet on https://github.com/0x90/
+wifuzz.
+
+8.18.4 Pyrit
+
+Pyrit (http://pyrit.googlecode.com) is a WPA/WPA2 brute force cracking tool. Its specialty
+lies in fully utilizing all cores of a CPU and concurrently using the GPUs of graphic cards
+for cracking, which increases the amount of probed keys per second from 40 (1.5 GHz single
+core cpu) up to 89000. Optionally Pyrit can save precalculated keys in a database to boost138
+the cracking process again thus 99.9% of the time is spend for computing the key and only
+0.1% for comparing.
+
+8.18.5 Wifiphisher
+
+Wifiphisher (https://github.com/wifiphisher/wifiphisher) is a man-in-the-middle tool, which
+implements all mentioned attacks (Evil Twin, KARMA and Known Beacons). It also
+includes web based attacks like a login portal, fake router firmware update or a web-based
+imitation of the Windows network manager to capturer login Credentials and pre-shared
+keys.

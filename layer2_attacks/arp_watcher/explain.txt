@@ -1,0 +1,30 @@
+Explanation:
+
+    This script monitors ARP traffic on a network interface (<iface>) and maintains a database (arp_watcher_db_file) mapping IP addresses to MAC addresses.
+    When an ARP response packet is detected, it checks if the device is new or if the device has a different IP address than previously recorded. If so, it
+    updates the database accordingly.
+    The script also handles SIGINT (Ctrl+C) to save the ARP database on shutdown.
+    Usage: Run the script with the interface name as an argument:
+
+ 
+    "python script.py <iface>"
+
+    Replace <iface> with the name of the network interface you want to monitor.
+
+This script can be used for monitoring and detecting changes in ARP mappings on a network. It's particularly useful for identifying new devices or changes in 
+IP assignments.
+
+
+At the start we define a signal handler in sig_int_handler() that gets called if the
+user interrupts the program. This function will save all known IP to MAC resolutions in the
+ip_mac dictionary to a file. Afterwards we read those ARP db file to initialize the program
+with all currently known resolutions or exit if the file cannot be read. Than we loop line
+by line through the files content and split each line into IP and MAC to save them in the
+ip_mac dictionary. Now we call the already known function sniff() that will invoke
+the callback function watch_arp for every received ARP packet.
+The function watch_arp implements the real logic of the program. When the sniffed
+packet is a is-at packet and therefore an ARP response than we first check if the IP exists
+in the ip_mac dictionary. If we didn’t find an entry the device is new and shows a message
+to the screen, otherwise we compare the MAC address with the MAC in our dictionary. If it
+differs the response is probably forged and we print a message to the screen. In both cases
+the dictionary gets updated with the new information.

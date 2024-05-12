@@ -1,0 +1,28 @@
+Switches like other computers have a limited size of memory that’s also true for the table
+holding MAC address information used by the switch to remember which MAC is on which
+port as well as its internal ARP cache. Sometimes switches react a bit weirdly if their buffers
+overflow. This can lead from denial of service up to giving up switching and behaving like a
+normal hub. In hub mode the overall higher traffic raise is not the only problem you would
+have thus all connected computers could see the complete traffic without additional actions.
+You should test how your switches react on these exceptions and that’s what the next script
+is good for. It generates random MAC addresses and sends them to your switch until the
+buffer is full.
+
+Explanation:
+
+    The script imports necessary modules from Scapy, a powerful packet manipulation tool.
+    It constructs a packet using Scapy's Packet Composition feature, creating Ethernet, IP, and ICMP headers with random values.
+    If no network interface argument is provided, the script defaults to using "enp3s0f1". Otherwise, it uses the network interface specified in the command-line argument.
+    A message is printed to indicate that the network is being flooded with random packets on the specified network interface.
+    The sendp() function is used to send the generated packet on the specified network interface (iface) in a continuous loop (loop=1).
+
+How to Use:
+
+    Run the script from the command line, optionally specifying the network interface as an argument:
+
+    
+    "python script.py <interface>"
+
+    Replace <interface> with the name of the network interface you want to flood with random packets. If no interface is provided, it will default to "enp3s0f1".
+    Once executed, the script will flood the specified network interface with random Ethernet, IP, and ICMP packets continuously until interrupted.
+

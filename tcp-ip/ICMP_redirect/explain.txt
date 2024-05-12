@@ -1,0 +1,23 @@
+Explanation:
+
+The script is a Python program that sends an ICMP Redirect message to redirect traffic from a specified target to a new gateway.
+It uses the getopt module to parse command-line options.
+Command-line options include -t for the target address, -o for the old gateway address, and -n for the new gateway address.
+After parsing the command-line options, the script constructs an ICMP Redirect packet using Scapy.
+The ICMP Redirect packet is sent to the target with the specified old gateway address and the new gateway address.
+This script could be used for network manipulation or testing scenarios where you want to redirect traffic from one gateway to another. However, 
+note that manipulating network traffic without proper authorization may be against network policies or laws. Always use such scripts responsibly and with permission.
+
+
+defence Method::
+
+ICMP redirection attacks can be easily defended against on a Linux system by deactivating
+the accept-redirects kernel option. This can be achieved by the following magic line:
+
+echo 1 > /proc/sys/net/ipv4/conf/all/accept_redirects62
+
+or by editing /etc/systctl.conf and setting
+
+net.ipv4.conf.all.accept_redirects = 0
+
+BSD- and Mac OS X systems provide similar functionality.

@@ -1,0 +1,48 @@
+This Python script is designed to perform an ARP (Address Resolution Protocol) poisoning attack. ARP poisoning involves manipulating ARP tables on a 
+local area network (LAN) to associate the attacker's MAC address with the IP address of another host, redirecting traffic intended for that host to the 
+attacker's machine.
+
+Let's break down how the script accomplishes this:
+
+1. **Command-line Argument Handling (Lines 7-9):** 
+   - It checks if the user provided the required command-line argument, which is the network interface (`iface`) to use for sniffing and sending packets.
+   - If the argument is missing, it prints the correct usage of the script and exits.
+
+2. **ARP Poisoning Callback Function (Lines 11-24):** 
+   - The `arp_poison_callback` function is defined to handle packets sniffed by Scapy.
+   - When Scapy detects an ARP packet, it triggers this callback function.
+   - Inside the function:
+     - It checks if the received packet is an ARP request (ARP operation code `1`).
+     - If it is, it constructs a spoofed ARP response packet (`answer`) claiming to be the target machine.
+     - The script then prints a message indicating the ARP spoofing activity.
+     - Finally, it sends the spoofed ARP response packet using Scapy's `sendp` function.
+
+3. **Packet Sniffing (Lines 26-29):**
+   - The script initiates packet sniffing using Scapy's `sniff` function.
+   - It specifies:
+     - The callback function to execute for each packet (`arp_poison_callback`).
+     - A filter to apply, in this case, only ARP packets (`"arp"`).
+     - The network interface to sniff on, obtained from the command-line arguments.
+     - `store=0` to prevent storing sniffed packets in memory.
+
+Overall, the script listens for ARP requests on the specified network interface and responds to them with spoofed ARP responses, tricking the sender 
+into associating the attacker's MAC address with the IP address of another host on the network. This enables the attacker to intercept and potentially 
+manipulate network traffic between the target host and other devices on the network.
+
+=>it will give output as:
+Fooling 192.168.4.1 that 192.168.4.19 is me
+.
+Sent 1 packets.
+Fooling 192.168.4.1 that 192.168.4.19 is me
+.
+Sent 1 packets.
+Fooling 192.168.4.19 that 192.168.4.1 is me
+.
+
+=>How to Use:
+To use this script, you need to run it from the command line with the interface as an argument. For example:
+
+"python script.py eth0"
+
+Replace eth0 with the appropriate interface name on your system. Once running, the script will sniff ARP packets on the specified interface and perform 
+ARP poisoning by replying to ARP requests with spoofed ARP replies. 

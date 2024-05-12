@@ -1,0 +1,59 @@
+This script is a DNS reverse lookup scanner. It takes an IP address range as input and performs reverse DNS lookups for each IP address within that range to find the associated hostnames.
+
+Here's the explanation of the script:
+
+1. **Shebang line**: `#!/usr/bin/python3` - This line specifies the interpreter to be used to run the script.
+
+2. **Import statements**:
+   ```python
+   import sys
+   import socket
+   from random import randint
+   ```
+   - `sys` module provides access to command-line arguments and other functionalities related to the Python interpreter.
+   - `socket` module provides access to low-level networking interfaces, including DNS lookup functions.
+   - `randint` function from `random` module is used to generate random integers.
+
+3. **Argument validation**:
+   ```python
+   if len(sys.argv) < 2:
+       print(sys.argv[0] + ": <start_ip> - <stop_ip>")
+       sys.exit(1)
+   ```
+   - Checks if the number of command-line arguments is less than 2. If so, it prints a usage message and exits with an error code.
+
+4. **Function `get_ips`**:
+   ```python
+   def get_ips(start_ip, stop_ip):
+       ips = []
+       # Code to generate list of IPs within the range
+       return ips
+   ```
+   - Generates a list of IP addresses within the range specified by `start_ip` and `stop_ip`.
+
+5. **Function `dns_reverse_lookup`**:
+   ```python
+   def dns_reverse_lookup(start_ip, stop_ip):
+       ips = get_ips(start_ip, stop_ip)
+       # Code to perform DNS reverse lookup for each IP address
+   ```
+   - Calls `get_ips` to obtain the list of IP addresses within the range.
+   - Performs DNS reverse lookup for each IP address in the list and prints the IP address along with its resolved hostname.
+
+6. **Parsing IP range**:
+   ```python
+   start_ip, stop_ip = sys.argv[1].split('-')
+   ```
+   - Splits the provided IP range from the command-line argument.
+
+7. **Calling `dns_reverse_lookup`**:
+   ```python
+   dns_reverse_lookup(start_ip.strip(), stop_ip.strip())
+   ```
+   - Calls the `dns_reverse_lookup` function with the specified IP range.
+
+To use this script, you need to provide an IP address range as a command-line argument, where the start and stop IP addresses are separated by a hyphen. For example:
+```
+python3 script.py 192.168.0.1-192.168.0.10
+```
+This command will perform reverse DNS lookups for IP addresses ranging from `192.168.0.1` to `192.168.0.10`.

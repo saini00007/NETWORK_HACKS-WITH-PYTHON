@@ -1,0 +1,9 @@
+Explanation:
+
+The script starts by importing necessary modules (os and scapy).
+It sets the iface variable to the network interface "wlp2s0".
+It then sets the network interface to monitor mode using the iwconfig command via os.system.
+A function dump_packet is defined to print information about packets that are not beacons, probe requests, or probe responses. It uses pkt.haslayer() to check the presence of specific layers in the packet.
+The main loop continuously loops over channels 1 through 14, sets the network interface to each channel, and then uses sniff() from Scapy to capture packets on the specified interface. The prn parameter is set to the dump_packet function defined earlier to process each captured packet.
+The script keeps running indefinitely, continuously switching between channels and capturing packets.
+This script essentially sets a network interface to monitor mode and continuously captures and prints information about non-beacon, non-probe packets on each channel within a loop.
